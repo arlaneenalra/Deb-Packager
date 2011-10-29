@@ -57,6 +57,9 @@ DH_MAKE=$RESULT
 is_installed dpkg-buildpackage dpkg-dev
 DPKG_BUILDPACKAGE=$RESULT
 
+# needed to sign packages
+is_installed gpg gnupg
+
 # Pull in configuration for the given project
 . ./project.conf
 
