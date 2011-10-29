@@ -18,6 +18,20 @@ check_defined() {
 	fi
 }
 
+# Look up an executable and return a path to it via RESULT or die 
+is_installed() {
+	EXECUTABLE=$1
+	PACKAGE=$2
+
+	RESULT=`which $1`
+
+	if [ -z "$RESULT" ]
+	then
+		echo "Please install $PACKAGE and try this operation again"
+		exit 2
+	fi
+}
+
 if [ ! -e 'project.conf' ]
 then
 	echo 'No project.conf file found in the current directory!' ;
@@ -35,6 +49,13 @@ fi
 
 # Where will we find git?
 GIT_PATH=`which git`
+
+# make sure we have dh_make and dpkg_buildpackage installed
+is_installed dh_make dh-make
+DH_MAKE=$RESULT
+
+is_installed dpkg-buildpackage dpkg-dev
+DPKG_BUILDPACKAGE=$RESULT
 
 # Pull in configuration for the given project
 . ./project.conf
@@ -59,7 +80,7 @@ fi
 cd $WORKING_DIR
 
 # Setup a default project incase we don't want to have to do all of it.
-dh_make --native -s --email $AUTHOR_EMAIL
+$DH_MAKE --native -s --email $AUTHOR_EMAIL
 
 # Pull in code from our project 
 (
@@ -68,6 +89,5 @@ dh_make --native -s --email $AUTHOR_EMAIL
 	GIT_WORK_TREE="$WORKING_DIR" git checkout -f
 )
 
-dpkg-buildpackage
-
+$DPKG_BUILDPACKAGE
 
