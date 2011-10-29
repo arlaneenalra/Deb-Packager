@@ -76,18 +76,23 @@ then
 	mkdir -p $WORKING_DIR
 fi
 
-# Build out the package dir
-cd $WORKING_DIR
-
-# Setup a default project incase we don't want to have to do all of it.
-$DH_MAKE --native -s --email $AUTHOR_EMAIL
-
-# Pull in code from our project 
+# sub shell to avoid lossing our current dir 
 (
-	# sub shell to avoid lossing our current dir 
-	cd $PROJECT_GIT_PATH
-	GIT_WORK_TREE="$WORKING_DIR" git checkout -f
+	# Build out the package dir
+	cd $WORKING_DIR
+
+	# Setup a default project incase we don't want to have to do all of it.
+	$DH_MAKE --native -s --email $AUTHOR_EMAIL --createorig 
 )
 
+# sub shell to avoid lossing our current dir 
+(
+	# Pull in code from our project 
+	cd $PROJECT_GIT_PATH
+	GIT_WORK_TREE="$WORKING_DIR" $GIT_PATH checkout -f
+)
+
+#build the package
+cd $WORKING_DIR
 $DPKG_BUILDPACKAGE
 
