@@ -47,16 +47,19 @@ check_defined 'PROJECT_NAME' $PROJECT_NAME
 
 check_defined 'PACKAGING_ROOT' $PACKAGING_ROOT
 
-# validate that the PACKAGING_ROOT exists, create it if not
-if [ -e $PACKAGING_ROOT ]
+# validate that the WORKING_DIR exists, create it if not
+WORKING_DIR="$PACKAGING_ROOT/$PROJECT_NAME""-""$VERSION"
+if [ ! -e $WORKING_DIR ]
 then
-	mkdir -p $PACKAGING_ROOT 	
+	echo "Creating Working DIR"
+	mkdir -p $WORKING_DIR
 fi
 
-WORKING_DIR="$PACKAGING_ROOT/$PROJECT_NAME""-""$VERSION"
-
 # Build out the package dir
-git init $WORKING_DIR
+cd $WORKING_DIR
+
+# Setup a default project incase we don't want to have to do all of it.
+dh_make --native -s --email $AUTHOR_EMAIL
 
 # Pull in code from our project 
 (
@@ -64,10 +67,6 @@ git init $WORKING_DIR
 	cd $PROJECT_GIT_PATH
 	GIT_WORK_TREE="$WORKING_DIR" git checkout -f
 )
-
-cd $WORKING_DIR
-
-dh_make --native -s --email $AUTHOR_EMAIL
 
 dpkg-buildpackage
 
