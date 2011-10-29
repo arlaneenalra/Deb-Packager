@@ -67,9 +67,12 @@ check_defined 'PROJECT_GIT_PATH' $PROJECT_GIT_PATH
 check_defined 'PROJECT_NAME' $PROJECT_NAME
 
 check_defined 'PACKAGING_ROOT' $PACKAGING_ROOT
+check_defined 'REPO_ROOT' $REPO_ROOT
 
 # validate that the WORKING_DIR exists, create it if not
 WORKING_DIR="$PACKAGING_ROOT/$PROJECT_NAME""-""$VERSION"
+PACKAGE_FILES="$PACKAGING_ROOT/$PROJECT_NAME""_""$VERSION""*"
+
 if [ ! -e $WORKING_DIR ]
 then
 	echo "Creating Working DIR"
@@ -92,7 +95,22 @@ fi
 	GIT_WORK_TREE="$WORKING_DIR" $GIT_PATH checkout -f
 )
 
-#build the package
-cd $WORKING_DIR
-$DPKG_BUILDPACKAGE
+(
+	#build the package
+	cd $WORKING_DIR
+	$DPKG_BUILDPACKAGE
+)
 
+# make sure that the repository exists
+if [ ! -e "$REPO_ROOT/binary" ]
+then
+	mkdir -p $REPO_ROOT/binary
+fi
+
+
+cp $PACKAGE_FILES $REPO_ROOT/binary
+
+(
+	cd $REPO_ROOT 
+	dpkg-scanpackages binary /dev/null | gzip -9c > $REPO_ROOT/binary/Packages.gz
+)
