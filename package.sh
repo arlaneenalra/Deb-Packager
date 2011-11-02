@@ -115,5 +115,5 @@ cp $PACKAGE_FILES $REPO_ROOT/binary
 
 (
 	cd $REPO_ROOT 
-	dpkg-scanpackages binary /dev/null | gzip -9c > $REPO_ROOT/binary/Packages.gz
+	dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz
 )
