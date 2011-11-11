@@ -88,7 +88,7 @@ fi
 
 	# Setup a default project incase we don't want to have to do all of it.
 	$DH_MAKE --native -s --email $AUTHOR_EMAIL --createorig 
-	find . -type f -name '*.ex' --delete 
+	find . -type f -name '*.ex' -delete 
 )
 
 # sub shell to avoid lossing our current dir 
