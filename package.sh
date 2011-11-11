@@ -66,7 +66,6 @@ is_installed gpg gnupg
 # Validate that our required paramters are configured
 check_defined 'AUTHOR_EMAIL' $AUTHOR_EMAIL
 
-check_defined 'PROJECT_GIT_PATH' $PROJECT_GIT_PATH
 check_defined 'PROJECT_NAME' $PROJECT_NAME
 
 check_defined 'PACKAGING_ROOT' $PACKAGING_ROOT
@@ -95,7 +94,6 @@ fi
 # sub shell to avoid lossing our current dir 
 (
 	# Pull in code from our project 
-	cd $PROJECT_GIT_PATH
 	GIT_WORK_TREE="$WORKING_DIR" $GIT_PATH checkout -f
 )
 
