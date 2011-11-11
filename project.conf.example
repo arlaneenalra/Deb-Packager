@@ -7,7 +7,6 @@ GIT_PATH=`which git`
 AUTHOR_EMAIL='jules@jules-vm'
 
 PROJECT_NAME='ue'
-PROJECT_GIT_PATH="../ue"
 
 PACKAGING_ROOT="../ue_packaged"
 REPO_ROOT="../repo"
