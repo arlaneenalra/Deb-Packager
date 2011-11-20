@@ -100,7 +100,7 @@ fi
 (
 	#build the package
 	cd $WORKING_DIR
-	$DPKG_BUILDPACKAGE
+	$DPKG_BUILDPACKAGE  -A
 )
 
 # make sure that the repository exists
